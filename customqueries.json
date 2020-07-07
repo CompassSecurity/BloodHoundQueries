@@ -1,0 +1,251 @@
+{
+    "queries": [
+        {
+            "name": "All Shortest Paths to Domain (including Computers)",
+            "queryList": [
+                {
+                    "final": false,
+                    "title": "Select a Domain...",
+                    "query": "MATCH (d:Domain) RETURN d.name ORDER BY d.name ASC"
+                },
+                {
+                    "final": true,
+                    "query": "MATCH p = allShortestPaths((uc)-[r:{}*1..]->(d:Domain {name: $result})) WHERE (uc:User OR uc:Computer) RETURN p",
+                    "endNode": "{}"
+                }
+            ]
+        },
+        {
+            "name": "All Shortest Paths to no LAPS",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = allShortestPaths((uc)-[r:{}*1..]->(c:Computer)) WHERE (uc:User OR uc:Computer) AND NOT uc = c AND c.haslaps = false RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "All Shortest Paths from Kerberoastable Users",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = allShortestPaths((u:User)-[r:{}*1..]->(c:Computer)) WHERE u.hasspn = true RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "All Shortest Paths from Owned Principals (including everything)",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = allShortestPaths((u:User)-[r:{}*1..]->(a)) WHERE u.owned = true AND u <> a RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "All Shortest Paths from Owned Principals to Domain",
+            "queryList": [
+                {
+                    "final": false,
+                    "title": "Select a Domain...",
+                    "query": "MATCH (d:Domain) RETURN d.name ORDER BY d.name ASC"
+                },
+                {
+                    "final": true,
+                    "query": "MATCH p = allShortestPaths((o)-[r:{}*1..]->(d:Domain)) WHERE o.owned = true AND d.name = $result RETURN p",
+                    "endNode": "{}"
+                }
+            ]
+        },
+        {
+            "name": "All Shortest Paths from Owned Principals to High Value Targets",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = allShortestPaths((o)-[r:{}*1..]->(h)) WHERE o.owned = true AND h.highvalue = true RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "All Shortest Paths from Owned Principals to no LAPS",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = allShortestPaths((o)-[r:{}*1..]->(c:Computer)) WHERE NOT o = c AND o.owned = true AND c.haslaps = false RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "All Shortest Paths from no Signing to Domain",
+            "queryList": [
+                {
+                    "final": false,
+                    "title": "Select a Domain...",
+                    "query": "MATCH (d:Domain) RETURN d.name ORDER BY d.name ASC"
+                },
+                {
+                    "final": true,
+                    "query": "MATCH p = allShortestPaths((c:Computer)-[r:{}*1..]->(d:Domain)) WHERE c.hassigning = false AND d.name = $result RETURN p",
+                    "endNode": "{}"
+                }
+            ]
+        },
+        {
+            "name": "All Shortest Paths from no Signing to High Value Targets",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = allShortestPaths((c:Computer)-[r:{}*1..]->(h)) WHERE NOT c = h AND c.hassigning = false AND h.highvalue = true RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "All Unconstrained Delegation Principals (excluding Domain Controllers and Administrators)",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (dca)-[r:MemberOf*0..]->(g:Group) WHERE g.objectid =~ $domain_controllers_id OR g.objectid =~ $administrators_id WITH COLLECT(dca) AS exclude MATCH p = (d:Domain)-[r:Contains*1..]->(uc) WHERE (uc:User OR uc:Computer) AND uc.unconstraineddelegation = true AND NOT uc IN exclude RETURN p",
+                    "props": {
+                        "domain_controllers_id": "S-1-5-.*-516",
+                        "administrators_id": ".*-S-1-5-32-544"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "All ACLs to Computers (excluding High Value Targets)",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (ucg)-[r]->(c:Computer) WHERE (ucg:User OR ucg:Computer OR ucg:Group) AND ucg.highvalue = false AND r.isacl = true RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "All Computers in Domain Admins",
+            "queryList": [
+                {
+                    "final": false,
+                    "title": "Select a Domain Admins group...",
+                    "query": "MATCH (g:Group) WHERE g.objectid =~ $domain_admins_id RETURN g.name ORDER BY g.name ASC",
+                    "props": {
+                        "domain_admins_id": "S-1-5-.*-512"
+                    }
+                },
+                {
+                    "final": true,
+                    "query": "MATCH p = (c:Computer)-[r:MemberOf|HasSIDHistory*1..]->(g:Group) WHERE g.name = $result RETURN p",
+                    "endNode": "{}"
+                }
+            ]
+        },
+        {
+            "name": "All Computers Local Admin to Another Computer",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (c1:Computer)-[r1:AdminTo]->(c2:Computer) RETURN p UNION ALL MATCH p = (c3:Computer)-[r2:MemberOf|HasSIDHistory*1..]->(g:Group)-[r3:AdminTo]->(c4:Computer) RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "All Computers without LAPS",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (d:Domain)-[r:Contains*1..]->(c:Computer) WHERE c.haslaps = false RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "All High Value Targets",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (d:Domain)-[r:Contains*1..]->(h) WHERE h.highvalue = true RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "All Owned Principals",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (d:Domain)-[r:Contains*1..]->(o) WHERE o.owned = true RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "All Users with Password in AD",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (d:Domain)-[r:Contains*1..]->(u:User) WHERE u.userpassword IS NOT NULL RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "All Users with \"Pass\" in AD Description",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (d:Domain)-[r:Contains*1..]->(u:User) WHERE u.description =~ '(?i).*pass.*' RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "All Users with Password not Required",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (d:Domain)-[r:Contains*1..]->(u:User) WHERE u.passwordnotreqd = true RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "All Users with with Same Name in Different Domains",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (u1:User),(u2:User) WHERE split(u1.name,'@')[0] = split(u2.name,'@')[0] AND u1.domain <> u2.domain AND toint(split(u1.objectid,'-')[7]) >= 1000 RETURN u1"
+                }
+            ]
+        },
+        {
+            "name": "Set DCSync Principals as High Value Targets",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (s)-[r:MemberOf|GetChanges*1..]->(d:Domain) WITH s, d MATCH (s)-[r:MemberOf|GetChangesAll*1..]->(d) WITH s, d MATCH p = (s)-[r:MemberOf|GetChanges|GetChangesAll*1..]->(d) SET s.highvalue = true, s.highvaluereason = 'DCSync Principal' RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "Set Unconstrained Delegation Principals as High Value Targets",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (d:Domain)-[r:Contains*1..]->(uc) WHERE (uc:User OR uc:Computer) AND uc.unconstraineddelegation = true SET uc.highvalue = true, uc.highvaluereason = 'Unconstrained Delegation' RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "Set Members of High Value Targets Groups as High Value Targets",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (a)-[r:MemberOf*1..]->(g:Group) WHERE a.highvalue = false AND g.highvalue = true SET a.highvalue = true, a.highvaluereason = 'Member of High Value Target Group' RETURN a"
+                }
+            ]
+        },
+        {
+            "name": "Remove Inactive Users and Computers from High Value Targets",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (uc) WHERE uc.highvalue = true AND ((uc:User AND uc.enabled = false) OR (uc:Computer AND ((uc.enabled = false) OR (uc.lastlogon > 0 AND uc.lastlogon < (TIMESTAMP() / 1000 - 15552000)) OR (uc.lastlogontimestamp > 0 AND uc.lastlogontimestamp < (TIMESTAMP() / 1000 - 15552000))))) SET uc.highvalue = false, uc.nothighvaluereason = 'Inactive' RETURN uc"
+                }
+            ]
+        }
+    ]
+}
