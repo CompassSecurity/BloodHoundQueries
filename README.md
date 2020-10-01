@@ -12,6 +12,16 @@ You can add them to your BloodHound by opening the tab "Queries", editing the "C
 
 ![Add custom queries](add-custom-queries.png)
 
+On Linux, you can simply install the queries using this curl command:
+```
+$ curl -o "~/.config/bloodhound/customqueries.json" "https://raw.githubusercontent.com/CompassSecurity/BloodHoundQueries/master/customqueries.json"
+```
+
+On Windows, you can simply install the queries using this PowerShell command:
+```
+PS C:\> Invoke-WebRequest -Uri "https://raw.githubusercontent.com/CompassSecurity/BloodHoundQueries/master/customqueries.json" -OutFile "$env:USERPROFILE\AppData\Roaming\bloodhound\customqueries.json"
+```
+
 ### All Shortest Paths to Domain (including Computers)
 Returns all the shortest path to the Domain, including the Computers.
 
