@@ -100,6 +100,19 @@
             ]
         },
         {
+            "name": "All Shortest Paths from Domain Users and Domain Computers (including everything)",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = allShortestPaths((g:Group)-[r:{}*1..]->(a)) WHERE (g.objectid =~ $domain_users_id OR g.objectid =~ $domain_computers_id) AND g <> a RETURN p",
+                    "props": {
+                        "domain_users_id": "S-1-5-.*-513",
+                        "domain_computers_id": "S-1-5-.*-515"
+                    }
+                }
+            ]
+        },
+        {
             "name": "All Unconstrained Delegation Principals (excluding Domain Controllers and Administrators)",
             "queryList": [
                 {
@@ -109,6 +122,24 @@
                         "domain_controllers_id": "S-1-5-.*-516",
                         "administrators_id": ".*-S-1-5-32-544"
                     }
+                }
+            ]
+        },
+        {
+            "name": "All Constrained Delegations",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (a)-[:AllowedToDelegate]->(c:Computer) RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "All Computers Allowed to Delegate for Another Computer",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (c1:Computer)-[:AllowedToDelegate]->(c2:Computer) RETURN p"
                 }
             ]
         },
@@ -225,7 +256,25 @@
             "queryList": [
                 {
                     "final": true,
-                    "query": "MATCH p = (d:Domain)-[r:Contains*1..]->(uc) WHERE (uc:User OR uc:Computer) AND uc.unconstraineddelegation = true SET uc.highvalue = true, uc.highvaluereason = 'Unconstrained Delegation' RETURN p"
+                    "query": "MATCH p = (d:Domain)-[r:Contains*1..]->(uc) WHERE (uc:User OR uc:Computer) AND uc.unconstraineddelegation = true SET uc.highvalue = true, uc.highvaluereason = 'Unconstrained Delegation Principal' RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "Set Local Admin or Reset Password Principals as High Value Targets",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (a)-[r:AdminTo|ForceChangePassword]->(b) SET a.highvalue = true, a.highvaluereason = 'Local Admin or Reset Password Principal' RETURN a"
+                }
+            ]
+        },
+        {
+            "name": "Set Principals with Privileges on Computers as High Value Targets",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (a)-[r:AllowedToDelegate|ExecuteDCOM|ForceChangePassword|GenericAll|GenericWrite|Owns|WriteDacl|WriteOwner]->(n:Computer) SET a.highvalue = true, a.highvaluereason = 'Principal with Privileges on Computers' RETURN a"
                 }
             ]
         },

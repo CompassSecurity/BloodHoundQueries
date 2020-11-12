@@ -23,49 +23,52 @@ PS C:\> Invoke-WebRequest -Uri "https://raw.githubusercontent.com/CompassSecurit
 ```
 
 ### All Shortest Paths to Domain (including Computers)
-Returns all the shortest path to the Domain, including the Computers.
+Returns all the shortest paths to the Domain, including the Computers.
 
 Similar to the pre-built query "Find Shortest Paths to Domain Admins", except that it includes not only the users but the computers as start nodes and targets the Domain instead of Domain Admins.
 
 ### All Shortest Paths to no LAPS
-Returns all the shortest path to computers without LAPS installed.
+Returns all the shortest paths to computers without LAPS installed.
 
-Handy in environments where LAPS is deployed on almost every machine in order to find the ones without it, attack them and possibly reuse local administrator passwords.
+Handy in environments where LAPS is deployed on almost every computer in order to find the ones without it, attack them and possibly reuse local administrator passwords.
 
 ### All Shortest Paths from Kerberoastable Users
-Returns all the shortest path from the kerberoastable users.
+Returns all the shortest paths from the kerberoastable users.
 
 Similar to the pre-built query "Shortest Paths from Kerberoastable Users", except that the user doesn't have to be selected individually.
 
 ### All Shortest Paths from Owned Principals (including everything)
-Returns all the shortest path from any principal marked as Owned to anything (users, computers, groups...).
+Returns all the shortest paths from any principal marked as Owned to anything (users, computers, groups...).
 
 Similar to the pre-built query "Shortest Path from Owned Principals", except that the user doesn't have to be selected individually and displays the paths to everything, not every to computers.
 
 ### All Shortest Paths from Owned Principals to Domain
-Returns all the shortest path from any principal marked as Owned to the Domain.
+Returns all the shortest paths from any principal marked as Owned to the Domain.
 
 ### All Shortest Paths from Owned Principals to High Value Targets
-Returns all the shortest path from any principal marked as Owned to targets marked as High Value.
+Returns all the shortest paths from any principal marked as Owned to targets marked as High Value.
 
 ### All Shortest Paths from Owned Principals to no LAPS
-Returns all the shortest path from any principal marked as Owned to computers without LAPS.
+Returns all the shortest paths from any principal marked as Owned to computers without LAPS.
 
-Handy in environments where LAPS is deployed on almost every machine in order to find the ones without it, attack them and possibly reuse local administrator passwords.
+Handy in environments where LAPS is deployed on almost every computer in order to find the ones without it, attack them and possibly reuse local administrator passwords.
 
 ### All Shortest Paths from no Signing to Domain
 Returns all the shortest paths from computers without SMB signing to the Domain.
 
-Handy in environments where SMB signing is enforced on almost every machine in order to find the ones without it, attack them and possibly reuse local administrator passwords.
+Handy in environments where SMB signing is enforced on almost every computer in order to find the ones without it, attack them and possibly reuse local administrator passwords.
 
 The computers without signing have to be imported manually with [BloodHoundLoader.py](BloodHoundLoader.py).
 
 ### All Shortest Paths from no Signing to High Value Targets
 Returns all the shortest paths from computers without SMB signing to targets marked as High Value.
 
-Handy in environments where SMB signing is enforced on almost every machine in order to target them specifically.
+Handy in environments where SMB signing is enforced on almost every computer in order to target them specifically.
 
 The computers without signing have to be imported manually with [BloodHoundLoader.py](BloodHoundLoader.py).
+
+### All Shortest Paths from Domain Users and Domain Computers (including everything)
+Returns all the shortest paths from the Domain Users and Domain Computers to anything (users, computers, groups...).
 
 ### All Unconstrained Delegation Principals (excluding Domain Controllers and Administrators)
 Returns all the principals allowed to perform Unconstrained Delegation (source: https://twitter.com/_wald0/status/1108660095800479744).
@@ -77,6 +80,12 @@ In order to exploit it, use the Unconstrained Delegation with the corresponding 
 * https://blog.netspi.com/machineaccountquota-is-useful-sometimes/
 * https://adsecurity.org/?p=1667
 * https://blog.redxorblue.com/2019/12/no-shells-required-using-impacket-to.html
+
+### All Constrained Delegations
+Returns all the principals allowed to perform Constrained Delegation with their target.
+
+### All Computers Allowed to Delegate for Another Computer
+Returns all the computers allowed to perform Constrained Delegation with their target.
 
 ### All ACLs to Computers (excluding High Value Targets)
 Returns all the users with an ACL to a computer, except the ones marked as High Value.
@@ -137,6 +146,12 @@ Mark all the principals with DCSync rights as High Value.
 ### Set Unconstrained Delegation Principals as High Value Targets
 Mark all the principals with Unconstrained Delegation privileges as High Value.
 
+### Set Local Admin or Reset Password Principals as High Value Targets
+Mark all the principals that are local administrators or that can reset passwords as High Value.
+
+### Set Principals with Privileges on Computers as High Value Targets
+Mark all the principals with certain privileges on computers as High Value.
+
 ### Set Members of High Value Targets Groups as High Value Targets
 Mark all the members of High Value groups as High Value.
 
@@ -153,21 +168,21 @@ MATCH (c:Computer) RETURN c.haslaps, COUNT(*)
 ```
 
 ### Local Administrators
-In certain cases, the groups being local administrators are added locally on the machines and not deployed via GPO. In that case, the "AdminTo" edges are not visible in BloodHound.
+In certain cases, the groups being local administrators are added locally on the computer and not deployed via GPO. In that case, the "AdminTo" edges are not visible in BloodHound.
 
-If the naming convention allows it, it is possible to find which group has access to which machine and to add the corresponding edges.
+If the naming convention allows it, it is possible to find which group has access to which computer and to add the corresponding edges.
 
-First of all, search for all the groups containing the name of a machine and lists the mapping:
+First of all, search for all the groups containing the name of a computer and lists the mapping:
 ```
 MATCH (g:Group), (c:Computer) WHERE g.name =~ (".*" + replace(c.name, ("." + c.domain), (".*" + "@" + c.domain))) RETURN g.name AS Group, c.name AS Computer
 ```
 
 If result is similar to this, you might be lucky and be able to add several new edges to your BloodHound:
 ```
-Group                                  Computer
-PREFIX_MACHINE1_SUFFIX@DOMAIN.LOCAL    MACHINE1.DOMAIN.LOCAL
-PREFIX_MACHINE2_SUFFIX@DOMAIN.LOCAL    MACHINE2.DOMAIN.LOCAL
-PREFIX_MACHINE3_SUFFIX@DOMAIN.LOCAL    MACHINE3.DOMAIN.LOCAL
+Group                                   Computer
+PREFIX_COMPUTER1_SUFFIX@DOMAIN.LOCAL    COMPUTER1.DOMAIN.LOCAL
+PREFIX_COMPUTER2_SUFFIX@DOMAIN.LOCAL    COMPUTER2.DOMAIN.LOCAL
+PREFIX_COMPUTER3_SUFFIX@DOMAIN.LOCAL    COMPUTER3.DOMAIN.LOCAL
 ```
 
 In order to create the new the edges according to the naming convention, you can use the following query where you have to replace the "PREFIX_" and "_SUFFIX" according to the results above:
