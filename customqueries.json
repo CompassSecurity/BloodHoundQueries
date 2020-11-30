@@ -296,5 +296,31 @@
                 }
             ]
         }
+            "name": "AdminTo or RDP for Lambda accounts",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (m:Group) WHERE m.name =~ '(?i)DOMAIN USERS@.*' OR m.name =~ '(?i)EveryOne@.*' OR m.name =~ '(?i)AUTHENTICATED USERS@.*' MATCH (n:Computer), p=(m)-[r:AdminTo|CanRDP]->(n) RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "Bad ACLs on Lambda accounts",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (m:Group) WHERE m.name =~ '(?i)DOMAIN USERS@.*' OR m.name =~ '(?i)EveryOne@.*' OR m.name =~ '(?i)AUTHENTICATED USERS@.*' MATCH (n:Computer) MATCH p = (m)-[r]->(n) WHERE r.isacl=true RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "Path From SPN users to High value target",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (m:User {hasspn:true}),(n {highvalue:true}),p=shortestPath((m)-[r*1..]->(n)) WHERE NONE (r IN relationships(p) WHERE type(r)= 'GetChanges') AND NONE (r in relationships(p) WHERE type(r)='GetChangesAll') AND NOT m=n RETURN p"
+                }
+            ]
+        }        
     ]
 }
