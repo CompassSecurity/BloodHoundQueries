@@ -484,6 +484,15 @@
 					"query": "MATCH p = (n)-[r:AZContributor]->(g) RETURN p"
 				}
 			]
-		}
+		},
+		{
+			"name": "Set AZGlobalAdmin or AZPrivilegedRoleAdmin as High Value Targets",
+			"queryList": [
+				{
+					"final": true,
+					"query": "MATCH p =(n)-[r:AZGlobalAdmin|AZPrivilegedRoleAdmin]->(m) SET n.highvalue = true, n.highvaluereason = 'Member of High Value Target Group' RETURN p"
+				}
+			]
+		}	
 	]
 }
