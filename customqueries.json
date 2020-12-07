@@ -490,9 +490,18 @@
 			"queryList": [
 				{
 					"final": true,
-					"query": "MATCH p =(n)-[r:AZGlobalAdmin|AZPrivilegedRoleAdmin]->(m) SET m.highvalue = true, n.highvalue = true, n.highvaluereason = 'Member of High Value Target Group' RETURN p"
+					"query": "MATCH p =(n)-[r:AZGlobalAdmin|AZPrivilegedRoleAdmin]->(m) SET m.highvalue = true, n.highvalue = true, n.highvaluereason = 'Member of High Value Target Group' RETURN p;"
 				}
 			]
-		}	
+		},
+		{
+			"name": "Set 'AAD DC ADMINISTRATORS' as High Value Targets",
+			"queryList": [
+				{
+					"final": true,
+					"query": "MATCH p=(n)-[r:MemberOf]->(m{name:'AAD DC ADMINISTRATORS'}) SET m.highvalue = true, n.highvalue = true, n.highvaluereason = 'Member of High Value Target Group' RETURN p;"
+				}
+			]
+		}
 	]
 }
