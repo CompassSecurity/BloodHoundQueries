@@ -25,11 +25,20 @@
             ]
         },
         {
-            "name": "All Shortest Paths from Kerberoastable Users",
+            "name": "All Shortest Paths from Kerberoastable Users to Computers",
             "queryList": [
                 {
                     "final": true,
                     "query": "MATCH p = allShortestPaths((u:User)-[r:{}*1..]->(c:Computer)) WHERE u.hasspn = true RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "All Shortest Paths from Kerberoastable Users to High Value Targets",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = allShortestPaths((u:User)-[r:{}*1..]->(h)) WHERE u.hasspn = true AND h.highvalue = true RETURN p"
                 }
             ]
         },

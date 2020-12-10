@@ -32,10 +32,13 @@ Returns all the shortest paths to computers without LAPS installed.
 
 Handy in environments where LAPS is deployed on almost every computer in order to find the ones without it, attack them and possibly reuse local administrator passwords.
 
-### All Shortest Paths from Kerberoastable Users
-Returns all the shortest paths from the kerberoastable users.
+### All Shortest Paths from Kerberoastable Users to Computers
+Returns all the shortest paths from the kerberoastable users to computers.
 
 Similar to the pre-built query "Shortest Paths from Kerberoastable Users", except that the user doesn't have to be selected individually.
+
+### All Shortest Paths from Kerberoastable Users to High Value Targets
+Returns all the shortest paths from the kerberoastable users to targets marked as High Value.
 
 ### All Shortest Paths from Owned Principals (including everything)
 Returns all the shortest paths from any principal marked as Owned to anything (users, computers, groups...).
