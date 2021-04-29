@@ -20,7 +20,7 @@
             "queryList": [
                 {
                     "final": true,
-                    "query": "MATCH p = allShortestPaths((uc)-[r:{}*1..]->(c:Computer)) WHERE (uc:User OR uc:Computer) AND NOT uc = c AND c.haslaps = false RETURN p"
+                    "query": "MATCH p = allShortestPaths((uc)-[r:{}*1..]->(c:Computer)) WHERE (uc:User OR uc:Computer) AND NOT uc = c AND c.haslaps = false AND c.enabled = true AND c.pwdlastset >= (datetime().epochseconds - 7890000) RETURN p"
                 }
             ]
         },
@@ -184,7 +184,7 @@
             "queryList": [
                 {
                     "final": true,
-                    "query": "MATCH p = (d:Domain)-[r:Contains*1..]->(c:Computer) WHERE c.haslaps = false RETURN p"
+                    "query": "MATCH p = (d:Domain)-[r:Contains*1..]->(c:Computer) WHERE c.haslaps = false  and c.enabled=true and c.pwdlastset >= (datetime().epochseconds - 7890000) RETURN p"
                 }
             ]
         },
