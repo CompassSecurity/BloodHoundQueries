@@ -20,7 +20,7 @@
             "queryList": [
                 {
                     "final": true,
-                    "query": "MATCH p = allShortestPaths((uc)-[r:{}*1..]->(c:Computer)) WHERE (uc:User OR uc:Computer) AND NOT uc = c AND c.haslaps = false RETURN p"
+                    "query": "MATCH p = allShortestPaths((uc)-[r:{}*1..]->(c:Computer)) WHERE (uc:User OR uc:Computer) AND NOT uc = c AND c.haslaps = false AND c.enabled = true AND c.pwdlastset >= (datetime().epochseconds - 7890000) RETURN p"
                 }
             ]
         },
@@ -193,7 +193,7 @@
             "queryList": [
                 {
                     "final": true,
-                    "query": "MATCH p = (d:Domain)-[r:Contains*1..]->(c:Computer) WHERE c.haslaps = false RETURN p"
+                    "query": "MATCH p = (d:Domain)-[r:Contains*1..]->(c:Computer) WHERE c.haslaps = false  and c.enabled=true and c.pwdlastset >= (datetime().epochseconds - 7890000) RETURN p"
                 }
             ]
         },
@@ -302,6 +302,213 @@
                 {
                     "final": true,
                     "query": "MATCH (uc) WHERE uc.highvalue = true AND ((uc:User AND uc.enabled = false) OR (uc:Computer AND ((uc.enabled = false) OR (uc.lastlogon > 0 AND uc.lastlogon < (TIMESTAMP() / 1000 - 15552000)) OR (uc.lastlogontimestamp > 0 AND uc.lastlogontimestamp < (TIMESTAMP() / 1000 - 15552000))))) SET uc.highvalue = false, uc.nothighvaluereason = 'Inactive' RETURN uc"
+                }
+            ]
+        },
+        {
+            "name": "AdminTo or RDP for Lambda accounts",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (m:Group) WHERE m.name =~ '(?i)DOMAIN USERS@.*' OR m.name =~ '(?i)EveryOne@.*' OR m.name =~ '(?i)AUTHENTICATED USERS@.*' MATCH (n:Computer), p=(m)-[r:AdminTo|CanRDP]->(n) RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "Bad ACLs on Lambda accounts",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (m:Group) WHERE m.name =~ '(?i)DOMAIN USERS@.*' OR m.name =~ '(?i)EveryOne@.*' OR m.name =~ '(?i)AUTHENTICATED USERS@.*' MATCH (n:Computer) MATCH p = (m)-[r]->(n) WHERE r.isacl=true RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "Path From SPN users to High value target",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (m:User {hasspn:true}),(n {highvalue:true}),p=shortestPath((m)-[r*1..]->(n)) WHERE NONE (r IN relationships(p) WHERE type(r)= 'GetChanges') AND NONE (r in relationships(p) WHERE type(r)='GetChangesAll') AND NOT m=n RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "----------------------------------------AZURE QUERIES----------------------------------",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": ""
+                }
+            ]
+        },
+        {
+            "name": "Return All Azure Users that are part of the 'Global Administrator' Role",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p =(n)-[r:AZGlobalAdmin*1..]->(m) RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "Return All On-Prem users with edges to Azure",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH  p=(m:User)-[r:AZResetPassword|AZOwns|AZUserAccessAdministrator|AZContributor|AZAddMembers|AZGlobalAdmin|AZVMContributor|AZOwnsAZAvereContributor]->(n) WHERE m.objectid CONTAINS 'S-1-5-21' RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "Find all paths to an Azure VM",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (n)-[r]->(g:AZVM) RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "Find all paths to an Azure KeyVault",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (n)-[r]->(g:AZKeyVault) RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "Return All Azure Users and their Groups",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(m:AZUser)-[r:MemberOf]->(n) WHERE NOT m.objectid CONTAINS 'S-1-5' RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "Return All Azure AD Groups that are synchronized with On-Premise AD",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:Group) WHERE n.objectid CONTAINS 'S-1-5' AND n.azsyncid IS NOT NULL RETURN n"
+                }
+            ]
+        },
+        {
+            "name": "Find all Privileged Service Principals",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (g:AZServicePrincipal)-[r]->(n) RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "Find all Owners of Azure Applications22",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (n)-[r:AZOwns]->(g:AZApp) RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "Return All Azure Users",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:AZUser) return n"
+                }
+            ]
+        },
+        {
+            "name": "Return All Azure Applications",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:AZApp) return n"
+                }
+            ]
+        },
+        {
+            "name": "Return All Azure Devices",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:AZDevice) return n"
+                }
+            ]
+        },
+        {
+            "name": "Return All Azure Groups",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:AZGroup) return n"
+                }
+            ]
+        },
+        {
+            "name": "Return all Azure Key Vaults",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:AZKeyVault) return n"
+                }
+            ]
+        },
+        {
+            "name": "Return all Azure Resource Groups",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:AZResourceGroup) return n"
+                }
+            ]
+        },
+        {
+            "name": "Return all Azure Service Principals",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:AZServicePrincipal) return n"
+                }
+            ]
+        },
+        {
+            "name": "Return all Azure Virtual Machines",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:AZVM) return n"
+                }
+            ]
+        },
+        {
+            "name": "Find All Principals with the ‘Contributor’ role",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (n)-[r:AZContributor]->(g) RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "Set AZGlobalAdmin or AZPrivilegedRoleAdmin as High Value Targets",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p =(n)-[r:AZGlobalAdmin|AZPrivilegedRoleAdmin]->(m) SET m.highvalue = true, n.highvalue = true, n.highvaluereason = 'Member of High Value Target Group' RETURN p;"
+                }
+            ]
+        },
+        {
+            "name": "Set 'AAD DC ADMINISTRATORS' as High Value Targets",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[r:MemberOf]->(m{name:'AAD DC ADMINISTRATORS'}) SET m.highvalue = true, n.highvalue = true, n.highvaluereason = 'Member of High Value Target Group' RETURN p;"
                 }
             ]
         }
