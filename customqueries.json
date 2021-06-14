@@ -247,7 +247,7 @@
             "queryList": [
                 {
                     "final": true,
-                    "query": "MATCH (u1:User),(u2:User) WHERE split(u1.name,'@')[0] = split(u2.name,'@')[0] AND u1.domain <> u2.domain AND toint(split(u1.objectid,'-')[7]) >= 1000 RETURN u1"
+                    "query": "MATCH (u1:User),(u2:User) WHERE split(u1.name,'@')[0] = split(u2.name,'@')[0] AND u1.domain <> u2.domain AND tointeger(split(u1.objectid,'-')[7]) >= 1000 RETURN u1"
                 }
             ]
         },
