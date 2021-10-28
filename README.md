@@ -198,22 +198,22 @@ MATCH (g:Group), (c:Computer) WHERE g.name =~ ("PREFIX_" + replace(c.name, ("." 
 
 It should be used with Python 3 and with the Neo4j module installed since it is run directly against the Neo4j database:
 ```
-pip3 install neo4j
+pip3 install --upgrade neo4j
 ```
 
 Set all the computers in the file "high_value.txt" to high value targets:
 ```
-python BloodHoundLoader.py --dburi bolt://localhost:7687 --dbuser neo4j --dbpassword BloodHound --mode h high_value.txt
+python3 BloodHoundLoader.py --dburi bolt://localhost:7687 --dbuser neo4j --dbpassword BloodHound --mode h high_value.txt
 ```
 
 Set all the computers in the file "owned.txt" to owned principals:
 ```
-python BloodHoundLoader.py --mode o owned.txt
+python3 BloodHoundLoader.py --mode o owned.txt
 ```
 
 Set all the computers in the file "no_smb_signing.txt" to "hassigning = false", in order to use them with the queries "All Shortest Paths from no Signing to *":
 ```
-python BloodHoundLoader.py --mode s no_smb_signing.txt
+python3 BloodHoundLoader.py --mode s no_smb_signing.txt
 ```
 
 The names of users and computers in the text file should correspond to the text shown on the GUI, e.g.:
@@ -225,10 +225,8 @@ GUEST@ACME.COM
 
 Full help:
 ```
-python BloodHoundLoader.py --help
-usage: BloodHoundLoader.py [-h] [--dburi DATABASEURI] [--dbuser DATABASEUSER] [--dbpassword DATABASEPASSWORD]
-                           (-m {h,o,s} | -o OPERATION) [-c COMMENT] [-v]
-                           filePaths [filePaths ...]
+python3 BloodHoundLoader.py --help
+usage: BloodHoundLoader.py [-h] [--dburi DATABASEURI] [--dbuser DATABASEUSER] [--dbpassword DATABASEPASSWORD] (-m {h,o,s} | -o OPERATION) [-c COMMENT] [-v] filePaths [filePaths ...]
 
 BloodHoundLoader, tool to set attributes in BloodHound for all the items contained in files
 
@@ -237,18 +235,18 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  --dburi DATABASEURI   Database URI
+  --dburi DATABASEURI   Database URI (default: bolt://localhost:7687)
   --dbuser DATABASEUSER
-                        Database user
+                        Database user (default: neo4j)
   --dbpassword DATABASEPASSWORD
-                        Database password
+                        Database password (default: BloodHound)
   -m {h,o,s}, --mode {h,o,s}
-                        Mode, h = set to high value, o = set to owned, s = set to no SMB signing
+                        Mode, h = set to high value, o = set to owned, s = set to no SMB signing (default: None)
   -o OPERATION, --operation OPERATION
-                        Operation to perform if the mode is not set, for instance "highvalue = true"
+                        Operation to perform if the mode is not set, for instance "highvalue = true" (default: None)
   -c COMMENT, --comment COMMENT
-                        Comment for the log
-  -v, --verbose         Verbose mode
+                        Comment for the log (default: )
+  -v, --verbose         Verbose mode (default: False)
 ```
 
 ## References
