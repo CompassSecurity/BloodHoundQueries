@@ -152,8 +152,10 @@ Mark all the principals with Unconstrained Delegation privileges as High Value.
 ### Set Local Admin or Reset Password Principals as High Value Targets
 Mark all the principals that are local administrators or that can reset passwords as High Value.
 
-### Set Principals with Privileges on Computers as High Value Targets
-Mark all the principals with certain privileges on computers as High Value.
+### Set Principals with Privileges on Cert Publishers as High Value Targets
+Mark all the principals with certain privileges on the Cert Publishers group as High Value.
+
+### 
 
 ### Set Members of High Value Targets Groups as High Value Targets
 Mark all the members of High Value groups as High Value.
