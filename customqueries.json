@@ -216,6 +216,24 @@
             ]
         },
         {
+            "name": "Group Delegated Outbound Object Control of Owned Principals",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (n {owned: true})-[r1:MemberOf*1..]->(g:Group)-[r2 {isacl: true}]->(n) RETURN p"
+                }
+            ]
+        },
+        {
+            "name": "Find Dangerous Rights for Groups under Domain Users",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(m:Group)-[r1:MemberOf*1..]->(g:Group)-[:Owns|WriteDacl|GenericAll|WriteOwner|ExecuteDCOM|GenericWrite|AllowedToDelegate|ForceChangePassword]->(n:Computer) WHERE m.objectid ENDS WITH '-513' RETURN p"
+                }
+            ]
+        },
+        {
             "name": "All Users with Password in AD",
             "queryList": [
                 {
