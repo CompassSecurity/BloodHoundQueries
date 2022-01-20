@@ -131,6 +131,14 @@ Return all targets that have been marked as High Value.
 ### All Owned Principals
 Return all the principals that have been marked as Owned.
 
+### Group Delegated Outbound Object Control of Owned Principals
+Return Outbound Object Control (also group-delegated) of all owned principals.
+
+### Find Dangerous Rights for Groups under Domain Users
+Find groups under Domain Users which have dangerous privileges over other objects.
+
+Similar to the pre-built query "Find Dangerous Rights for Domain Users Groups", except that it includes groups nested under Domain Users.
+
 ### All Users with Password in AD
 Return all the users with a password in the AD object, can then be read in the Node Info.
 
@@ -154,6 +162,9 @@ Mark all the principals that are local administrators or that can reset password
 
 ### Set Principals with Privileges on Computers as High Value Targets
 Mark all the principals with certain privileges on computers as High Value.
+
+### Set Principals with Privileges on Cert Publishers as High Value Targets
+Mark all the principals with certain privileges on the Cert Publishers group as High Value.
 
 ### Set Members of High Value Targets Groups as High Value Targets
 Mark all the members of High Value groups as High Value.
