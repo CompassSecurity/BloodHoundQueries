@@ -216,11 +216,20 @@
             ]
         },
         {
+            "name": "LAPS Passwords Readable by Owned Principals",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p = (n {owned: true})-[r1:MemberOf*1..]->(g:Group)-[r2 {isacl: true}]->(t) RETURN p"
+                }
+            ]
+        },
+        {
             "name": "Group Delegated Outbound Object Control of Owned Principals",
             "queryList": [
                 {
                     "final": true,
-                    "query": "MATCH p = (n {owned: true})-[r1:MemberOf*1..]->(g:Group)-[r2 {isacl: true}]->(n) RETURN p"
+                    "query": "MATCH p = (n {owned: true})-[r1:MemberOf*1..]->(g:Group)-[r2 {isacl: true}]->(t) RETURN p"
                 }
             ]
         },

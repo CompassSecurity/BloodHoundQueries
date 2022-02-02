@@ -131,6 +131,9 @@ Return all targets that have been marked as High Value.
 ### All Owned Principals
 Return all the principals that have been marked as Owned.
 
+### LAPS Passwords Readable by Owned Principals
+Return GenericAll rights (also group-delegated) of all owned principals. This allows reading the LAPS password `ms-Mcs-AdmPwd`.
+
 ### Group Delegated Outbound Object Control of Owned Principals
 Return Outbound Object Control (also group-delegated) of all owned principals.
 
