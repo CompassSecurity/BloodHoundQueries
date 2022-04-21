@@ -237,6 +237,18 @@ COMPUTER.ACME.COM
 GUEST@ACME.COM
 ```
 
+Create new AdminTo edges based on the tuples in the file "adminto.txt":
+```
+python3 BloodHoundLoader.py --edge AdminTo adminto.txt
+```
+
+The names tuples in the text file must be comma separated and ordered (source,destination):
+```
+DOMAIN ADMINS@ACME.COM,DC.ACME.COM
+SERVER ADMINS@ACME.COM,COMPUTER1.ACME.COM
+EDWARD.NIGMA@ACME.COM,RIDDLE.ACME.COM
+```
+
 Full help:
 ```
 python3 BloodHoundLoader.py --help
@@ -258,6 +270,8 @@ optional arguments:
                         Mode, h = set to high value, o = set to owned, s = set to no SMB signing (default: None)
   -o OPERATION, --operation OPERATION
                         Operation to perform if the mode is not set, for instance "highvalue = true" (default: None)
+  -e EDGE, --edge EDGE
+                        Create the provided edge, file must contain exactly 2 nodes per line, comma separated (default: None)
   -c COMMENT, --comment COMMENT
                         Comment for the log (default: )
   -v, --verbose         Verbose mode (default: False)
