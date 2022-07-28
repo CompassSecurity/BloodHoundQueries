@@ -226,6 +226,9 @@ The computers without signing have to be imported manually with [BloodHoundLoade
 #### Shortest Paths from Domain Users and Domain Computers (including everything)
 Return all the shortest paths from the Domain Users and Domain Computers to anything (users, computers, groups...).
 
+### Active Directory Certificate Services (AD CS)
+The AD CS queries come from [ly4k](https://github.com/ly4k/Certipy/blob/main/customqueries.json) and are to be used in conjunction with [Certipy](https://github.com/ly4k/Certipy).
+
 ## Custom Neo4j Queries
 The following queries are to be used in Neo4j Browser directly (by default http://localhost:7474/browser/).
 
