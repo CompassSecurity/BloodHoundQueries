@@ -824,16 +824,8 @@
           ]
         },
         {
-            "name": "----------------------------------------AZURE QUERIES----------------------------------",
-            "queryList": [
-                {
-                    "final": true,
-                    "query": ""
-                }
-            ]
-        },
-        {
             "name": "Return All Azure Users that are part of the 'Global Administrator' Role",
+            "category": "Azure",
             "queryList": [
                 {
                     "final": true,
@@ -843,6 +835,7 @@
         },
         {
             "name": "Return All On-Prem users with edges to Azure",
+            "category": "Azure",
             "queryList": [
                 {
                     "final": true,
@@ -852,6 +845,7 @@
         },
         {
             "name": "Find all paths to an Azure VM",
+            "category": "Azure",
             "queryList": [
                 {
                     "final": true,
@@ -861,6 +855,7 @@
         },
         {
             "name": "Find all paths to an Azure KeyVault",
+            "category": "Azure",
             "queryList": [
                 {
                     "final": true,
@@ -870,6 +865,7 @@
         },
         {
             "name": "Return All Azure Users and their Groups",
+            "category": "Azure",
             "queryList": [
                 {
                     "final": true,
@@ -879,6 +875,7 @@
         },
         {
             "name": "Return All Azure AD Groups that are synchronized with On-Premise AD",
+            "category": "Azure",
             "queryList": [
                 {
                     "final": true,
@@ -888,6 +885,7 @@
         },
         {
             "name": "Find all Privileged Service Principals",
+            "category": "Azure",
             "queryList": [
                 {
                     "final": true,
@@ -897,6 +895,7 @@
         },
         {
             "name": "Find all Owners of Azure Applications",
+            "category": "Azure",
             "queryList": [
                 {
                     "final": true,
