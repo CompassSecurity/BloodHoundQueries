@@ -321,7 +321,7 @@ optional arguments:
   --dbpassword DATABASEPASSWORD
                         Database password (default: BloodHound)
   -m {h,o,s}, --mode {h,o,s}
-                        Mode, h = set to high value, o = set to owned, s = set to no SMB signing (default: None)
+                        Mode, h = set to high value, o = set to owned, s = set to no SMB signing, u = umark as owned (default: None)
   -o OPERATION, --operation OPERATION
                         Operation to perform if the mode is not set, for instance "highvalue = true" (default: None)
   -e EDGE, --edge EDGE
