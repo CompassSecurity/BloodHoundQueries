@@ -229,6 +229,9 @@ Return all the shortest paths from the Domain Users and Domain Computers to anyt
 ### Active Directory Certificate Services (AD CS)
 The AD CS queries come from [ly4k](https://github.com/ly4k/Certipy/blob/main/customqueries.json) and are to be used in conjunction with [Certipy](https://github.com/ly4k/Certipy).
 
+### Azure
+The Azure queries come from [haus3c](https://hausec.com/2020/11/23/azurehound-cypher-cheatsheet/) and are to be used in conjuction with [AzureHound](https://github.com/BloodHoundAD/AzureHound)
+
 ## Custom Neo4j Queries
 The following queries are to be used in Neo4j Browser directly (by default http://localhost:7474/browser/).
 
