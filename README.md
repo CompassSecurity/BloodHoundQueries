@@ -106,7 +106,10 @@ Return principals for a chosen domain that have an SPN. These can be kerberoaste
 Return principals in the Administrators group of a chosen domain that have an SPN. These can be kerberoasted.
 
 #### Constrained Delegations
-Return principals for a chosen domain allowed to perform Constrained Delegation with their target.
+Return principals for a chosen domain allowed to perform Constrained Delegation and their target.
+
+#### Constrained Delegations with Protocol Transition (trustedToAuth)
+Return principals for a chosen domain allowed to perform Constrained Delegation with Protocol Transition and their target.
 
 #### Computers Allowed to Delegate for Another Computer
 Return computers for a chosen domain allowed to perform Constrained Delegation with their target.

@@ -315,6 +315,21 @@
             ]
         },
         {
+            "name": "Constrained Delegations with Protocol Transition (trustedToAuth)",
+            "category": "Kerberos",
+            "queryList": [
+                {
+                    "final": false,
+                    "title": "Select a Domain...",
+                    "query": "MATCH (n:Domain) RETURN n.name ORDER BY n.name DESC"
+                },
+                {
+                    "final": true,
+                    "query": "MATCH p = (a {domain: $result, trustedToAuth: true})-[:AllowedToDelegate]->(c:Computer) RETURN p"
+                }
+            ]
+        },
+        {
             "name": "Computers Allowed to Delegate for Another Computer",
             "category": "Kerberos",
             "queryList": [
