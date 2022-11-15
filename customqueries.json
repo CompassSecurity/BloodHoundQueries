@@ -375,6 +375,21 @@
             ]
         },
         {
+            "name": "Configure Resource-Based Constrained Delegation Permissions",
+            "category": "Kerberos",
+            "queryList": [
+                {
+                    "final": false,
+                    "title": "Select a Domain...",
+                    "query": "MATCH (n:Domain) RETURN n.name ORDER BY n.name DESC"
+                },
+                {
+                    "final": true,
+                    "query": "MATCH p=(m)-[r:AllowedToAct]->(n) RETURN p"
+                }
+            ]
+        },
+        {
             "name": "Interesting GPOs by Keyword",
             "category": "Group Policies",
             "queryList": [
