@@ -385,7 +385,7 @@
                 },
                 {
                     "final": true,
-                    "query": "MATCH p=(m)-[r:AllowedToAct]->(n) RETURN p"
+                    "query": "MATCH p=(m)-[r:AddAllowedToAct]->(n) RETURN p"
                 }
             ]
         },
