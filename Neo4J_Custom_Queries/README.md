@@ -21,12 +21,12 @@ If the naming convention allows it, it is possible to find which group has acces
 
 First of all, search for all the groups containing the name of a computer and lists the mapping:
 
-``cypher
+```cypher
 MATCH (g:Group), (c:Computer) WHERE g.name =~ (".*" + replace(c.name, ("." + c.domain), (".*" + "@" + c.domain))) RETURN g.name AS Group, c.name AS Computer
 ```
 
 If result is similar to this, you might be lucky and be able to add several new edges to your BloodHound:
-``cypher
+```cypher
 Group                                   Computer
 PREFIX_COMPUTER1_SUFFIX@DOMAIN.LOCAL    COMPUTER1.DOMAIN.LOCAL
 PREFIX_COMPUTER2_SUFFIX@DOMAIN.LOCAL    COMPUTER2.DOMAIN.LOCAL
@@ -34,6 +34,6 @@ PREFIX_COMPUTER3_SUFFIX@DOMAIN.LOCAL    COMPUTER3.DOMAIN.LOCAL
 ```
 
 In order to create the new the edges according to the naming convention, you can use the following query where you have to replace the "PREFIX_" and "_SUFFIX" according to the results above:
-``cypher
+```cypher
 MATCH (g:Group), (c:Computer) WHERE g.name =~ ("PREFIX_" + replace(c.name, ("." + c.domain), ("_SUFFIX" + "@" + c.domain))) CREATE (g)-[r:AdminTo]->(c) RETURN g.name AS Group, c.name AS Computer
 ```
