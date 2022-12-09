@@ -284,11 +284,3 @@ The computers without signing have to be imported manually with [BloodHoundLoade
 #### Shortest Paths from Domain Users and Domain Computers (including everything)
 
 Return all the shortest paths from the Domain Users and Domain Computers to anything (users, computers, groups...).
-
-### Active Directory Certificate Services (AD CS)
-
-The AD CS queries come from [ly4k](https://github.com/ly4k/Certipy/blob/main/customqueries.json) and are to be used in conjunction with [Certipy](https://github.com/ly4k/Certipy).
-
-### Azure
-
-The Azure queries come from [haus3c](https://hausec.com/2020/11/23/azurehound-cypher-cheatsheet/) and are to be used in conjuction with [AzureHound](https://github.com/BloodHoundAD/AzureHound)
