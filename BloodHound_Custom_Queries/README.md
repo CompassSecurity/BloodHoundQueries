@@ -271,7 +271,7 @@ Return all the shortest paths from computers without SMB signing to the Domain.
 
 Handy in environments where SMB signing is enforced on almost every computer in order to find the ones without it, attack them and possibly reuse local administrator passwords.
 
-The computers without signing have to be imported manually with [BloodHoundLoader.py](BloodHoundLoader.py).
+The computers without signing have to be imported manually with [BloodHound Loader](../BloodHound_Loader).
 
 #### Shortest Paths from no Signing to High Value Targets
 
@@ -279,7 +279,7 @@ Return all the shortest paths from computers without SMB signing to targets mark
 
 Handy in environments where SMB signing is enforced on almost every computer in order to target them specifically.
 
-The computers without signing have to be imported manually with [BloodHoundLoader.py](BloodHoundLoader.py).
+The computers without signing have to be imported manually [BloodHound Loader](../BloodHound_Loader).
 
 #### Shortest Paths from Domain Users and Domain Computers (including everything)
 
