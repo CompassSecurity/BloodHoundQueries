@@ -18,6 +18,8 @@ The file contains the following BloodHound custom queries:
   - https://hausec.com/2020/11/23/azurehound-cypher-cheatsheet/
   - https://github.com/hausec/Bloodhound-Custom-Queries
 
+Note: Another option is to use [bqm](https://github.com/Acceis/bqm) (Bloodhound Query Merger) taht deduplicates custom BloudHound queries from different datasets (actually 12) and merge them in one customqueries.json file.
+
 ## Usage
 
 Download and various queries:
