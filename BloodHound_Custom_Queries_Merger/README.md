@@ -32,7 +32,7 @@ cp customqueries.json ~/.config/bloodhound/customqueries.json
 
 You will find the custom queries in BloodHound:
 
-![Merged BloodHound Custom Queries](bloodhound_queries.png
+![Merged BloodHound Custom Queries](bloodhound_queries.png)
 
 ## Alternative
 
