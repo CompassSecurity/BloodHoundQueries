@@ -32,4 +32,8 @@ cp customqueries.json ~/.config/bloodhound/customqueries.json
 
 You will find the custom queries in BloodHound:
 
-![Merged BloodHound Custom Queries](bloodhound_queries.png)
+![Merged BloodHound Custom Queries](bloodhound_queries.png
+
+## Alternative
+
+[Bloodhound Query Merger (bqm)](https://github.com/Acceis/bqm) is another tool that deduplicates custom BloudHound queries from different datasets (currently 12) and merge them in one customqueries.json file.
