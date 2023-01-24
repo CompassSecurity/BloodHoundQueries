@@ -490,7 +490,7 @@
             "queryList": [
                 {
                     "final": true,
-                    "query": "MATCH (s)-[r:MemberOf|GetChanges*1..]->(d:Domain) WITH s, d MATCH (s)-[r:MemberOf|GetChangesAll*1..]->(d) WITH s, d MATCH p = (s)-[r:MemberOf|GetChanges|GetChangesAll*1..]->(d) AND a.highvalue = false SET s.highvalue = true, s.highvaluereason = 'DCSync Principal' RETURN p"
+                    "query": "MATCH (s)-[r:MemberOf|GetChanges*1..]->(d:Domain) WITH s, d MATCH (s)-[r:MemberOf|GetChangesAll*1..]->(d) WITH s, d MATCH p = (s)-[r:MemberOf|GetChanges|GetChangesAll*1..]->(d) WHERE s.highvalue = false SET s.highvalue = true, s.highvaluereason = 'DCSync Principal' RETURN p"
                 }
             ]
         },
@@ -500,7 +500,7 @@
             "queryList": [
                 {
                     "final": true,
-                    "query": "MATCH p = (d:Domain)-[r:Contains*1..]->(uc) WHERE (uc:User OR uc:Computer) AND uc.unconstraineddelegation = true AND a.highvalue = false SET uc.highvalue = true, uc.highvaluereason = 'Unconstrained Delegation Principal' RETURN p"
+                    "query": "MATCH p = (d:Domain)-[r:Contains*1..]->(uc) WHERE (uc:User OR uc:Computer) AND uc.unconstraineddelegation = true AND uc.highvalue = false SET uc.highvalue = true, uc.highvaluereason = 'Unconstrained Delegation Principal' RETURN p"
                 }
             ]
         },
@@ -510,7 +510,7 @@
             "queryList": [
                 {
                     "final": true,
-                    "query": "MATCH (a)-[r:AdminTo|ForceChangePassword]->(b) AND a.highvalue = false SET a.highvalue = true, a.highvaluereason = 'Local Admin or Reset Password Principal' RETURN a"
+                    "query": "MATCH (a)-[r:AdminTo|ForceChangePassword]->(b) WHERE a.highvalue = false SET a.highvalue = true, a.highvaluereason = 'Local Admin or Reset Password Principal' RETURN a"
                 }
             ]
         },
@@ -520,7 +520,7 @@
             "queryList": [
                 {
                     "final": true,
-                    "query": "MATCH (a)-[r:AllowedToDelegate|ExecuteDCOM|ForceChangePassword|GenericAll|GenericWrite|Owns|WriteDacl|WriteOwner]->(n:Computer) AND a.highvalue = false SET a.highvalue = true, a.highvaluereason = 'Principal with Privileges on Computers' RETURN a"
+                    "query": "MATCH (a)-[r:AllowedToDelegate|ExecuteDCOM|ForceChangePassword|GenericAll|GenericWrite|Owns|WriteDacl|WriteOwner]->(n:Computer) WHERE a.highvalue = false SET a.highvalue = true, a.highvaluereason = 'Principal with Privileges on Computers' RETURN a"
                 }
             ]
         },
