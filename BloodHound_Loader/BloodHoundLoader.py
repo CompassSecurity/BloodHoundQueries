@@ -21,6 +21,7 @@ group.add_argument('-o', '--operation', dest = 'operation', help = 'Operation to
 group.add_argument('-e', '--edge', dest = 'edge', help = 'Create the provided edge, file must contain exactly 2 nodes per line, comma separated')
 parser.add_argument('-c', '--comment', dest = 'comment', help = 'Comment for the log', default = '')
 parser.add_argument('-v', '--verbose', dest = 'verbose', help = 'Verbose mode', action = 'store_true')
+parser.add_argument('-b', '--batchsize', dest = 'batchSize', help = 'Number of element to update simultaneously', type = int, default = 10000)
 parser.add_argument('filePaths', nargs = '+', help = 'Paths of files the to import')
 arguments = parser.parse_args()
 
@@ -50,6 +51,24 @@ else:
 
 logger.debug('[*] Operation: ' + operation)
 
+def handleStandardOperation(filePath, operation, comment, inputSet):
+    log = '(file: ' + filePath + ', comment: ' + comment + ', operation: ' + operation + ')'
+    query = 'MATCH (b:Base) WHERE b.name IN $inputSet SET b.' + operation + ', b.BloodHoundLoaderLog = $log RETURN b.name AS name'
+    results = session.run(query, inputSet = list(inputSet), log = log)
+
+    modifiedSet = set()
+    for result in results:
+        modifiedSet.add(result['name'])
+    errorSet = inputSet - modifiedSet
+
+    modified = len(modifiedSet)
+    errors = len(errorSet)
+    total = modified + errors
+    logger.info('[*] %s%6i%s%6i%s%6i' % ('Modified:', modified, '  Errors:', errors, '  Total:', total))
+
+    if errors > 0:
+        logger.debug('[-] Items in error: ' + str(errorSet))
+
 try:
     driver = GraphDatabase.driver(arguments.databaseUri, auth = Auth(scheme = 'basic', principal = arguments.databaseUser, credentials = arguments.databasePassword))
     with driver.session() as session:
@@ -57,8 +76,8 @@ try:
             with open(filePath) as file:
                 logger.info('[*] Opened file: ' + filePath)
 
-                for line in file:
-                    if operation == 'edge':
+                if operation == 'edge':
+                    for line in file:
                         item = line.strip().split(',')
                         logger.debug('[*] Current item: ' + item[0] + ' ' + item[1])
 
@@ -78,24 +97,21 @@ try:
                                 logger.debug('[*] Stored message: ' + log)
                             else:
                                 logger.error('[-] Could not create: ' + source + ' - ' + arguments.edge + ' -> ' + destination)
-                    else:
-                        item = line.strip()
-                        logger.debug('[*] Current item: ' + item)
 
+                else:
+                    inputSet = set()
+                    for line in file:
+                        item = line.strip()
                         if item:
                             name = item.upper()
+                            inputSet.add(name)
 
-                            log = '(file: ' + filePath + ', comment: ' + arguments.comment + ')'
-                            query = 'MATCH (a {name: $name}) SET a.' + operation + ', a.BloodHoundLoaderLog = $log RETURN COUNT(*) AS count'
-                            results = session.run(query, name = name, log = log)
+                        if len(inputSet) >= arguments.batchSize:
+                            handleStandardOperation(filePath, operation, arguments.comment, inputSet)
+                            inputSet = set()
 
-                            count = results.single()['count']
-                            if count > 0:
-                                logger.info('[+] Modified: ' + item)
-                                logger.debug('[*] Number of modified entries: ' + str(count))
-                                logger.debug('[*] Stored message: ' + log)
-                            else:
-                                logger.error('[-] Could not modify: ' + item)
+                    if len(inputSet) > 0:
+                        handleStandardOperation(filePath, operation, arguments.comment, inputSet)
 
 except ServiceUnavailable:
     logger.exception('[-] Connection to BloodHound Neo4j database failed')
