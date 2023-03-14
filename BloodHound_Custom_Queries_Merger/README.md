@@ -19,9 +19,9 @@ The file contains the following BloodHound custom queries:
   - https://github.com/hausec/Bloodhound-Custom-Queries
 
 ## Prerequisites
-To user the customqueries downloader, please install jq first, e.g.:   
+To user the custom query downloader, please install jq first, e.g.:   
 ```bash
-apt install jq
+sudo apt install jq
 ```
 
 ## Usage
