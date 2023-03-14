@@ -18,11 +18,17 @@ The file contains the following BloodHound custom queries:
   - https://hausec.com/2020/11/23/azurehound-cypher-cheatsheet/
   - https://github.com/hausec/Bloodhound-Custom-Queries
 
+## Prerequisites
+To user the custom query downloader, please install jq first, e.g.:   
+```bash
+sudo apt install jq
+```
+
 ## Usage
 
 Download and various queries:
 ```bash
-./bloodhound-customqueries-merger
+./bloodhound-customqueries-downloader
 ```
 
 Install the queries:
