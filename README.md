@@ -6,7 +6,7 @@ This project contains:
 
 * [BloodHound Custom Queries](BloodHound_Custom_Queries) we often use to see important things in BloodHound
 * [Neo4j Custom Queries](Neo4J_Custom_Queries) we use to extract data directly from the Neo4j browser console
-* [BloodHound Loader](BloodHoundLoader) script, which allows to make batch modifications to the BloodHound data
+* [BloodHound Loader](BloodHound_Loader) script, which allows to make batch modifications to the BloodHound data
 * [BloodHound Custom Queries Merger](BloodHound_Custom_Queries_Merger) script to download and merge multiple BloodHound customqueries from different sources.
 
 ## References
