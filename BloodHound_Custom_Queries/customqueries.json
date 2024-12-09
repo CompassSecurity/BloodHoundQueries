@@ -685,6 +685,26 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "Search From Owned to Anything",
+            "category": "Shortest Paths",
+            "queryList": [
+                {
+                    "final": false,
+                    "title": "Select the node to search...",
+                    "query": "MATCH (n {owned:true}) RETURN n.name",
+                    "props": {
+                        "name": ".*"
+                    }
+                },
+                {
+                    "final": true,
+                    "query": "MATCH p = allshortestPaths((n)-[*1..]->(c))  WHERE n.name = $result AND NOT c=n  RETURN p",
+                    "allowCollapse": true,
+                    "endNode": "{}"
+                }
+            ]
         }
     ]
 }
