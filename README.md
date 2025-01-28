@@ -1,5 +1,12 @@
 # Compass Security BloodHound Resources
 
+## Deprecation Notice
+
+This repository is for resources regarding the legacy BloodHound. For resources
+regarding the new BloodHound Community Edition (CE), check out our
+[bloodhoundce-resources](https://github.com/CompassSecurity/bloodhoundce-resources)
+repository.
+
 ## About
 
 This project contains:
